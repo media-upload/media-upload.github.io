@@ -21,6 +21,7 @@
     "paper-bottom-sheet" : "Collaborne/paper-bottom-sheet#^1.1.1",
     "compound-timepicker" : "motss/compound-timepicker#^0.5.1",
     "app-datepicker" : "motss/app-datepicker#^2.7.7",
+    "paper-date-picker-item" : "Collaborne/paper-date-picker-item#^1.0.26",
     "polymer-simple-icon-dropdown" : "vision89/polymer-simple-icon-dropdown#^1.0.2",
     "file-upload" : "winhowes/file-upload#^1.8.1",
     "mygod-image" : "Mygod/mygod-image#^3.0.0"
