@@ -6834,9 +6834,11 @@ e._bubble()}function Bn(e,t){return $n(this,e,t,1)}function Jn(e,t){return $n(th
         --compound-timepicker-stroke-hour-hand: #4285f4;
         --compound-timepicker-stroke-minute-hand: #4285f4;
       }
+      paper-input {
+        max-width: 320px;
+      }
     </style>
-    <app-datepicker-dialog id="startDatePicker" date="{{planDate.startDate}}" with-backdrop="" disabledays="" input-date="[[planDate.startDate]]"></app-datepicker-dialog>
-    <compound-timepicker-dialog with-backdrop="" id="startTimePicker" time="{{time}}"></compound-timepicker-dialog>
+    
     <backend-template name="EASY BACKEND">
       <backend-category icon="icons:home" name="Web Tools" route="cat1">
         <backend-page name="MEDIA UPLOAD TOOL" route="page-a">
@@ -6850,14 +6852,6 @@ e._bubble()}function Bn(e,t){return $n(this,e,t,1)}function Jn(e,t){return $n(th
             </p>
             <p>
               <paper-datetime-picker-item icon="icons:today" placeholder="Add date, time defaults to 9AM" default-time="09:00"></paper-datetime-picker-item>
-            </p>
-            <p>
-              <paper-button raised="" on-tap="openStartDate">Choose Start Date</paper-button>
-              <paper-button disabled="">[[planDate.startDate]]</paper-button>
-            </p>
-            <p>
-              <paper-button raised="" on-tap="openStartTime" name="timePicker">Choose Start Time</paper-button>
-              <paper-button disabled="">[[time]]</paper-button>
             </p>
 
             <paper-input label="Alt text"></paper-input>
