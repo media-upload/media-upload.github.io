@@ -5620,6 +5620,8 @@ this.currentTarget=t,this.defaultPrevented=!1,this.eventPhase=Event.AT_TARGET,th
         --compound-timepicker-stroke-minute-hand: #4285f4;
       }
     </style>
+    <app-datepicker-dialog id="startDatePicker" date="{{planDate.startDate}}" with-backdrop="" disabledays="" input-date="[[planDate.startDate]]"></app-datepicker-dialog>
+    <compound-timepicker-dialog with-backdrop="" id="startTimePicker" time="{{time}}"></compound-timepicker-dialog>
     <backend-template name="EASY BACKEND">
       <backend-category icon="icons:home" name="Web Tools" route="cat1">
         <backend-page name="MEDIA UPLOAD TOOL" route="page-a">
@@ -5634,12 +5636,10 @@ this.currentTarget=t,this.defaultPrevented=!1,this.eventPhase=Event.AT_TARGET,th
             <p>
               <paper-button raised="" on-tap="openStartDate">Choose Start Date</paper-button>
               <paper-button disabled="">[[planDate.startDate]]</paper-button>
-              <app-datepicker-dialog id="startDatePicker" date="{{planDate.startDate}}" with-backdrop="" disabledays="" input-date="[[planDate.startDate]]"></app-datepicker-dialog>
             </p>
             <p>
               <paper-button raised="" on-tap="openStartTime" name="timePicker">Choose Start Time</paper-button>
               <paper-button disabled="">[[time]]</paper-button>
-              <compound-timepicker-dialog with-backdrop="" id="startTimePicker" time="{{time}}"></compound-timepicker-dialog>
             </p>
 
             <paper-input label="Alt text"></paper-input>
