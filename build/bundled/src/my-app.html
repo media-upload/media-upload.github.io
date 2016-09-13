@@ -7042,7 +7042,7 @@ e._bubble()}function Bn(e,t){return $n(this,e,t,1)}function Jn(e,t){return $n(th
 
       paper-material {
         background: #fff;
-        padding: 30px;
+        padding: 12px 24px;
         margin: 16px;
         max-width: 650px;
       }
@@ -7059,6 +7059,7 @@ e._bubble()}function Bn(e,t){return $n(this,e,t,1)}function Jn(e,t){return $n(th
 
       paper-input {
         max-width: 320px;
+        margin: auto;
       }
 
       .swipe {
@@ -7079,7 +7080,7 @@ e._bubble()}function Bn(e,t){return $n(this,e,t,1)}function Jn(e,t){return $n(th
         max-width: 320px;
         border-bottom: 1px solid #777;
         cursor: pointer;
-        margin: 22px 0;
+        margin: 22px auto;
       }
 
       .yellow-button {
@@ -7096,12 +7097,13 @@ e._bubble()}function Bn(e,t){return $n(this,e,t,1)}function Jn(e,t){return $n(th
       }
       iron-swipeable-container {
           position: absolute;
-          top: 407px;
-          left: 81px;
+          top: 389px;
+          left: 75px;
       }
       paper-input iron-icon {
         color: #9b9b9b;
         margin-right: 4px;
+        cursor: pointer;
       }
     </style>
           <paper-material>
@@ -7111,7 +7113,7 @@ e._bubble()}function Bn(e,t){return $n(this,e,t,1)}function Jn(e,t){return $n(th
             </div>
             <p>Create and preview components on all devices.</p>
             <p>
-            <paper-input label="URL path to image" type="search" hidden$="[[!editable]]" id="imgUrl" placeholder="e.g. http://lorempixel.com/640/320/" autosave="test" results="5" on-change="urlInputChange">
+            <paper-input label="Image source URL" type="search" hidden$="[[!editable]]" id="imgUrl" placeholder="e.g. http://lorempixel.com/640/320/" autosave="test" results="5" on-change="urlInputChange">
             </paper-input>
             </p>
 
@@ -7125,21 +7127,21 @@ e._bubble()}function Bn(e,t){return $n(this,e,t,1)}function Jn(e,t){return $n(th
                 <iron-image style="width:274px; height:176px" class="swipe" sizing="cover" preload="" fade="" src="[[imgSrc]]"></iron-image>
 
               </iron-swipeable-container>
-            <paper-input label="Link URL">
+            <paper-input label="Image link URL">
               <iron-icon icon="icons:link" prefix=""></iron-icon>
             </paper-input>
-            <paper-input label="Image label">
+            <paper-input label="Image text label">
               <iron-icon icon="icons:label-outline" prefix=""></iron-icon>
             </paper-input>
             <paper-datetime-picker-item icon="icons:today" placeholder="Start date / time (PST)" default-time="09:00"></paper-datetime-picker-item>
             <paper-datetime-picker-item icon="icons:event" placeholder="End date / time (PST)" default-time="09:00"></paper-datetime-picker-item>
             <p>
-              <paper-button raised="" on-tap="submit" name="submit" id="submit">Download</paper-button>
+              <paper-button raised="" on-tap="submit" name="submit" id="submit">Publish</paper-button>
             </p>
           </paper-material>
 
-    <paper-toast id="mainToast" duration="5000" text="Collection successfully downloaded!">
-      <paper-button on-tap="closeToast" class="yellow-button">Create Another</paper-button>
+    <paper-toast id="mainToast" duration="5000" text="Content Published!">
+      <paper-button on-tap="closeToast" class="yellow-button">Undo</paper-button>
     </paper-toast>
   </template>
 
