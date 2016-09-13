@@ -7113,11 +7113,6 @@ e._bubble()}function Bn(e,t){return $n(this,e,t,1)}function Jn(e,t){return $n(th
               <h1>Component Builder</h1>
             </div>
             <p>Create and preview components on all devices.</p>
-            <p>
-            <paper-input label="Image source URL" hidden$="[[!editable]]" id="imgUrl" placeholder="e.g. http://lorempixel.com/640/320/" autosave="test" results="5" on-change="urlInputChange">
-              <iron-icon icon="icons:insert-photo" prefix=""></iron-icon>
-            </paper-input>
-            </p>
 
             <iron-image style="width:240px; height:460px; background-color: white" sizing="contain" preload="" fade="" src="../images/iphone.png"></iron-image>
 
@@ -7129,6 +7124,9 @@ e._bubble()}function Bn(e,t){return $n(this,e,t,1)}function Jn(e,t){return $n(th
                 <iron-image style="width:188px; height:94px; background-color: lightgray" class="swipe" sizing="cover" preload="" fade="" src="[[imgSrc]]"></iron-image>
 
               </iron-swipeable-container>
+            <paper-input label="Image source URL" id="imgUrl" autosave="test" results="5" on-change="urlInputChange">
+              <iron-icon icon="icons:insert-photo" prefix=""></iron-icon>
+            </paper-input>
             <paper-input label="Image link URL">
               <iron-icon icon="icons:link" prefix=""></iron-icon>
             </paper-input>
