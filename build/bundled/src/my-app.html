@@ -7122,11 +7122,11 @@ e._bubble()}function Bn(e,t){return $n(this,e,t,1)}function Jn(e,t){return $n(th
             <iron-image style="width:375px; height:667px; background-color: white" sizing="contain" preload="" fade="" src="../images/iphone.png"></iron-image>
 
               <iron-swipeable-container>
-                <iron-image style="width:274px; height:176px; background-color: lightgray" class="swipe" sizing="cover" preload="" fade="" src="[[imgSrc]]"></iron-image>
+                <iron-image style="width:274px; height:136px; background-color: lightgray" class="swipe" sizing="cover" preload="" fade="" src="[[imgSrc]]"></iron-image>
 
-                <iron-image style="width:274px; height:176px; background-color: lightgray" class="swipe" sizing="cover" preload="" fade="" src="[[imgSrc]]"></iron-image>
+                <iron-image style="width:274px; height:136px; background-color: lightgray" class="swipe" sizing="cover" preload="" fade="" src="[[imgSrc]]"></iron-image>
 
-                <iron-image style="width:274px; height:176px; background-color: lightgray" class="swipe" sizing="cover" preload="" fade="" src="[[imgSrc]]"></iron-image>
+                <iron-image style="width:274px; height:136px; background-color: lightgray" class="swipe" sizing="cover" preload="" fade="" src="[[imgSrc]]"></iron-image>
 
               </iron-swipeable-container>
             <paper-input label="Image link URL">
@@ -7147,6 +7147,6 @@ e._bubble()}function Bn(e,t){return $n(this,e,t,1)}function Jn(e,t){return $n(th
     </paper-toast>
   </template>
 
-  <script>Polymer({is:"my-app",openSheet:function(){this.$.sheet.open()},properties:{imgSrc:{type:String,notify:!0,value:"http://lorempixel.com/320/160"},planDate:{type:Object,value:function(){return{startDate:"2016/12/01",endDate:"2016/12/31"}},observer:"_planDateChanged"}},openStartDate:function(){this.$.startDatePicker.open()},openStartTime:function(){this.$.startTimePicker.open()},submit:function(){console.log("submit!"),this.$.mainToast.open()},urlInputChange:function(){console.log("got here"),console.log(this.$.imgUrl.value),this.imgSrc=this.$.imgUrl.value},closeToast:function(){this.$.mainToast.close()},_planDateChanged:function(t,e){console.log("plan-date-changed:",t,e)}});</script>
+  <script>Polymer({is:"my-app",openSheet:function(){this.$.sheet.open()},properties:{imgSrc:{type:String,notify:!0,value:"http://lorempixel.com/640/320"},planDate:{type:Object,value:function(){return{startDate:"2016/12/01",endDate:"2016/12/31"}},observer:"_planDateChanged"}},openStartDate:function(){this.$.startDatePicker.open()},openStartTime:function(){this.$.startTimePicker.open()},submit:function(){console.log("submit!"),this.$.mainToast.open()},urlInputChange:function(){console.log("got here"),console.log(this.$.imgUrl.value),this.imgSrc=this.$.imgUrl.value},closeToast:function(){this.$.mainToast.close()},_planDateChanged:function(t,e){console.log("plan-date-changed:",t,e)}});</script>
 </dom-module>
 </body></html>
