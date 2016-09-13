@@ -27,6 +27,7 @@
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="my-icons.html">
@@ -48,7 +49,8 @@
       }
 
       .container {
-        position: relative;
+        /*position: relative;*/
+        @apply(--layout-center-justified);
       }
 
       #submit {
@@ -98,7 +100,7 @@
       iron-swipeable-container {
           position: absolute;
           top: 257px;
-          left: 50px;
+          left: 97px;
       }
       paper-input iron-icon {
         color: #9b9b9b;
@@ -113,6 +115,8 @@
             </div>
             <p>Create and preview components on all devices.</p>
 
+            <div class="container">
+
             <iron-image style="width:240px; height:460px; background-color: white" sizing="contain" preload="" fade="" src="../images/iphone.png"></iron-image>
 
               <iron-swipeable-container>
@@ -123,19 +127,34 @@
                 <iron-image style="width:188px; height:94px; background-color: lightgray" class="swipe" sizing="cover" preload="" fade="" src="[[imgSrc]]"></iron-image>
 
               </iron-swipeable-container>
-            <paper-input label="Image source URL" id="imgUrl" autosave="test" results="5" on-change="urlInputChange">
-              <iron-icon icon="icons:insert-photo" prefix=""></iron-icon>
-            </paper-input>
-            <paper-input label="Image link URL">
+            </div>
+
+            <paper-input label="Image link URL" id="imgUrl" autosave="test" results="5" on-change="urlInputChange" hidden$="[[isFrench]]">
               <iron-icon icon="icons:link" prefix=""></iron-icon>
             </paper-input>
-            <paper-input label="Image text label">
+            <paper-input label="Image link URL (FR)" id="imgUrl" autosave="test" results="5" on-change="urlInputChange" hidden$="[[!isFrench]]">
+              <iron-icon icon="icons:link" prefix=""></iron-icon>
+            </paper-input>
+
+            <paper-input label="Image text label" hidden$="[[isFrench]]">
               <iron-icon icon="icons:label-outline" prefix=""></iron-icon>
             </paper-input>
+            <paper-input label="Image text label (FR)" hidden$="[[!isFrench]]">
+              <iron-icon icon="icons:label-outline" prefix=""></iron-icon>
+            </paper-input>
+
+            <paper-input label="Image launch URL" hidden$="[[isFrench]]">
+              <iron-icon icon="icons:launch" prefix=""></iron-icon>
+            </paper-input>
+            <paper-input label="Image launch URL (FR)" hidden$="[[!isFrench]]">
+              <iron-icon icon="icons:launch" prefix=""></iron-icon>
+            </paper-input>
+
             <paper-datetime-picker-item icon="icons:today" placeholder="Start date / time (PST)" default-time="09:00"></paper-datetime-picker-item>
             <paper-datetime-picker-item icon="icons:event" placeholder="End date / time (PST)" default-time="09:00"></paper-datetime-picker-item>
             <p>
               <paper-button raised="" on-tap="submit" name="submit" id="submit">Publish</paper-button>
+              <paper-checkbox on-tap="toggleFrench">French</paper-checkbox>
             </p>
           </paper-material>
 
@@ -144,6 +163,6 @@
     </paper-toast>
   </template>
 
-  <script>Polymer({is:"my-app",openSheet:function(){this.$.sheet.open()},properties:{imgSrc:{type:String,notify:!0,value:"http://lorempixel.com/640/320"},planDate:{type:Object,value:function(){return{startDate:"2016/12/01",endDate:"2016/12/31"}},observer:"_planDateChanged"}},openStartDate:function(){this.$.startDatePicker.open()},openStartTime:function(){this.$.startTimePicker.open()},submit:function(){console.log("submit!"),this.$.mainToast.open()},urlInputChange:function(){console.log("got here"),console.log(this.$.imgUrl.value),this.imgSrc=this.$.imgUrl.value},closeToast:function(){this.$.mainToast.close()},_planDateChanged:function(t,e){console.log("plan-date-changed:",t,e)}});</script>
+  <script>Polymer({is:"my-app",openSheet:function(){this.$.sheet.open()},properties:{imgSrc:{type:String,notify:!0,value:"http://lorempixel.com/640/320"},isFrench:{type:Boolean,notify:!0,value:!1},planDate:{type:Object,value:function(){return{startDate:"2016/12/01",endDate:"2016/12/31"}},observer:"_planDateChanged"}},toggleFrench:function(){this.isFrench=!this.isFrench},openStartDate:function(){this.$.startDatePicker.open()},openStartTime:function(){this.$.startTimePicker.open()},submit:function(){console.log("submit!"),this.$.mainToast.open()},urlInputChange:function(){console.log("got here"),console.log(this.$.imgUrl.value),this.imgSrc=this.$.imgUrl.value},closeToast:function(){this.$.mainToast.close()},_planDateChanged:function(e,t){console.log("plan-date-changed:",e,t)}});</script>
 </dom-module>
 </body></html>
