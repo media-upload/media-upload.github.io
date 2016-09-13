@@ -27,6 +27,7 @@
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/paper-toast/paper-toast.html">
+
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="my-icons.html">
 
@@ -75,7 +76,7 @@
       }
 
       paper-datetime-picker-item {
-        max-width: 324px;
+        max-width: 320px;
         border-bottom: 1px solid #777;
         cursor: pointer;
       }
@@ -98,125 +99,46 @@
           left: 81px;
       }
     </style>
-    
-    
-      
-        
           <paper-material>
             <div class="container">
               <div class="circle">1</div>
               <h1>Component Builder</h1>
             </div>
-            <p>Enter a URL</p>
+            <p>Create and preview components on all devices.</p>
             <p>
             <paper-input label="URL path to image" type="search" hidden$="[[!editable]]" id="imgUrl" placeholder="e.g. http://lorempixel.com/640/320/" autosave="test" results="5" on-change="urlInputChange">
             </paper-input>
             </p>
 
             <iron-image style="width:375px; height:667px; background-color: white" sizing="contain" preload="" fade="" src="../images/iphone.png"></iron-image>
-            
+
               <iron-swipeable-container>
-                <iron-image style="width:274px; height:176px" sizing="cover" preload="" fade="" src="[[imgSrc]]"></iron-image>
+                <iron-image style="width:274px; height:176px" class="swipe" sizing="cover" preload="" fade="" src="[[imgSrc]]"></iron-image>
 
-                <iron-image style="width:274px; height:176px" sizing="cover" preload="" fade="" src="[[imgSrc]]"></iron-image>
+                <iron-image style="width:274px; height:176px" class="swipe" sizing="cover" preload="" fade="" src="[[imgSrc]]"></iron-image>
 
-                <iron-image style="width:274px; height:176px" sizing="cover" preload="" fade="" src="[[imgSrc]]"></iron-image>
+                <iron-image style="width:274px; height:176px" class="swipe" sizing="cover" preload="" fade="" src="[[imgSrc]]"></iron-image>
 
               </iron-swipeable-container>
-            
-
-            <paper-input label="Alt text"></paper-input>
-            
-              
-            
-            
-              
-            
+            <paper-input label="Link URL"></paper-input>
+            <paper-input label="Image caption / alt text"></paper-input>
             <p>
-              <paper-datetime-picker-item icon="icons:today" placeholder="Add date, time defaults to 9AM" default-time="09:00"></paper-datetime-picker-item>
+              I need this image to be active from
             </p>
-
             <p>
-              <paper-button raised="" on-tap="submit" name="submit" id="submit">Submit</paper-button>
+              <paper-datetime-picker-item icon="icons:today" placeholder="Start date / time (PST)" default-time="09:00"></paper-datetime-picker-item>
+            </p>
+            <p>until</p>
+            <p>
+              <paper-datetime-picker-item icon="icons:today" placeholder="End date / time (PST)" default-time="09:00"></paper-datetime-picker-item>
+            </p>
+            <p>
+              <paper-button raised="" on-tap="submit" name="submit" id="submit">Download</paper-button>
             </p>
           </paper-material>
-        
-        
-          
-            
-            
-              
-              
-              
-              
-              
-          
-        
-      
-      
-        
-          
-            
-            
-              
-              
-              
-              
-              
-          
-          
-            
-            
-              
-              
-              
-              
-              
-          
-          
-            
-            
-              
-              
-              
-              
-              
-          
-          
-            
-            
-              
-              
-              
-              
-              
-          
-          
-            
-            
-              
-              
-              
-              
-              
-          
-        
-        
-          
-            
-            
-              
-              
-              
-              
-              
-          
-        
-      
-    
-    
-    <paper-toast id="mainToast" duration="0" text="This toast will stay opened until you close it, or open another toast.">
-      <paper-button on-tap="closeToast" class="yellow-button">Close now!</paper-button>
+
+    <paper-toast id="mainToast" duration="5000" text="Collection successfully downloaded!">
+      <paper-button on-tap="closeToast" class="yellow-button">Create Another</paper-button>
     </paper-toast>
   </template>
 
