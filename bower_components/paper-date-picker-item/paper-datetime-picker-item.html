@@ -38,16 +38,23 @@
 		.text {
 			width: 100px;
 		}
+		paper-icon-item, paper-item {
+			padding-left: 2px;
+			margin-bottom: -10px;
+		}
+		paper-item-body {
+			margin-left: -28px;
+		}
 	</style>
 
 	<template>
 		<paper-icon-item on-tap="_editDate" class="flex item" has-no-date$="[[_hasNoDate]]">
-			<paper-ripple fit></paper-ripple>
+			<!--<paper-ripple fit></paper-ripple>-->
 			<iron-icon icon="[[icon]]" item-icon class="icon"></iron-icon>
 			<paper-item-body class="text">[[_formattedDate]]</paper-item-body>
 		</paper-icon-item>
 		<paper-item class="flex" on-tap="_editTime" hidden="[[_hasNoDate]]">
-			<paper-ripple fit></paper-ripple>
+			<!--<paper-ripple fit></paper-ripple>-->
 			[[_formattedTime]]
 		</paper-item>
 	</template>
