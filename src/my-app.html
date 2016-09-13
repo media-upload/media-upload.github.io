@@ -85,12 +85,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       paper-datetime-picker-item {
-        width: 380px;
-      }
-
-      .callout {
+        max-width: 324px;
+        border-bottom: 1px solid #777;
         cursor: pointer;
       }
+
       .yellow-button {
         color: var(--paper-yellow-a100);
       }
@@ -149,9 +148,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <!--<file-upload droppable="true" raised="true" multi="true" accept="image/*">Choose Image</file-upload>-->
             <!--</p>-->
             <p>
-              <paper-card class="callout">
-                <paper-datetime-picker-item icon="icons:today" placeholder="Add date, time defaults to 9AM" default-time="09:00"></paper-datetime-picker-item>
-              </paper-card>
+              <paper-datetime-picker-item icon="icons:today" placeholder="Add date, time defaults to 9AM" default-time="09:00"></paper-datetime-picker-item>
             </p>
 
             <p>
