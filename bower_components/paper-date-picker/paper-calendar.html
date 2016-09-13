@@ -1,4 +1,4 @@
-<html><head><link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
 <link rel="import" href="../paper-button/paper-button.html">
@@ -7,7 +7,7 @@
 <link rel="import" href="../iron-selector/iron-selector.html">
 <link rel="import" href="../moment-element/moment-import.html">
 
-</head><body><dom-module id="paper-calendar">
+<dom-module id="paper-calendar">
   <template>
     <style>
       :host {
@@ -170,7 +170,10 @@
               <div class="month-row layout horizontal justified flex">
                 <template is="dom-repeat" items="{{row}}">
                   <div class="month-col">
-                    <svg version="1.1" viewBox="0 0 100 100" class$="{{_getDayClass('day-item', item.date, today, date)}}" disabled$="{{_isDisabled(item.day, item.date, minDate, maxDate)}}" on-tap="_tapDay" date$="{{item.name}}">
+                    <svg version="1.1" viewBox="0 0 100 100"
+                      class$="{{_getDayClass('day-item', item.date, today, date)}}"
+                      disabled$="{{_isDisabled(item.day, item.date, minDate, maxDate)}}"
+                      on-tap="_tapDay" date$="{{item.name}}">
                       <circle cx="50" cy="50" r="49" class="selection"></circle>
                     </svg>
                     <div class="day">{{item.day}}</div>
@@ -184,20 +187,447 @@
       <div id="monthNav" class="month-nav layout horizontal center">
         <div class="flex col self-stretch">
           <div class="btn" on-tap="_prevMonth">
-            <paper-ripple center="" class="ripple circle"></paper-ripple>
+            <paper-ripple center class="ripple circle"></paper-ripple>
             <iron-icon class="icon flex" icon="chevron-left"></iron-icon>
           </div>
         </div>
         <div class="flex-5"></div>
         <div class="flex col self-stretch">
           <div class="btn" on-tap="_nextMonth">
-            <paper-ripple center="" class="ripple circle"></paper-ripple>
+            <paper-ripple center class="ripple circle"></paper-ripple>
             <iron-icon class="icon flex" icon="chevron-right"></iron-icon>
           </div>
         </div>
       </div>
     </div>
   </template>
-  <script>!function(){var t=4,e=.5,i=40,n=2,s=1;Polymer({is:"paper-calendar",properties:{date:{type:Date,notify:!0,value:function(){return new Date},observer:"_dateChanged"},locale:{type:String,value:"en",notify:!0,observer:"_localeChanged"},minDate:{type:Date,value:null},maxDate:{type:Date,value:null},currentMonth:{type:Number},currentYear:{type:Number},_contentClass:String,_months:Array},behaviors:[Polymer.IronResizableBehavior],observers:["_populate(currentYear, currentMonth, minDate, maxDate, locale)"],listeners:{"iron-resize":"_resizeHandler",swiped:"_onSwipe"},ready:function(){this._updateToday(),this.currentMonth=this.date.getMonth()+1,this.currentYear=this.date.getFullYear(),this._transitionEvent=this.style.WebkitTransition?"transitionEnd":"webkitTransitionEnd"},dateFormat:function(t,e,i){if(!t)return"";var n=moment(t);return n.locale(i||this.locale),n.format(e)},_localeChanged:function(t){var e=moment.localeData(t),i=e._week.dow;this.set("_firstDayOfWeek",i);for(var n=[],s=i;s<7+i;s++)n.push(e._weekdaysMin[s%7]);this.set("_weekdays",n)},_populate:function(t,e,i,n){var a,r,h,o,l,u,_,d=[];if(i&&new Date(t,e,0)<i)return this.currentYear=i.getFullYear(),void(this.currentMonth=i.getMonth()+1);if(n&&new Date(t,e-1,1)>n)return this.currentYear=n.getFullYear(),void(this.currentMonth=n.getMonth()+1);for(var c=-s;c<=s;c++)if(h=[[]],o=1,a=new Date(t,e-1+c,1),r=a.getMonth(),_={year:a.getFullYear(),month:a.getMonth()+1,date:new Date(a)},this._monthWithinValidRange(_.year,_.month)){var m=a.getDay()-this._firstDayOfWeek;for(m<0&&(m=7+m),l=0;l<m;l++)h[0].push({day:null,date:null});for(;a.getMonth()===r;)h[0].length&&l%7===0&&h.push([]),u={date:new Date(a.getFullYear(),r,o),name:this.dateFormat(a,"YYYY-MM-DD"),year:t,month:r,day:o},h[h.length-1].push(u),a.setDate(++o),l++;for(;l<42;)l%7===0&&h.push([]),h[h.length-1].push({day:null,date:null}),l+=1;_.weeks=h,d.push(_)}d.length&&(this.set("_months",d),this._positionSlider())},_getDayClass:function(t,e){return e?(e.getTime()===this.today.getTime()&&(t+=" today"),this.date&&this.date.getTime()===e.getTime()&&(t+=" selected"),t):t},_isDisabled:function(t,e){return!t||!this._withinValidRange(e)},_getMonthClass:function(t,e){return t+" month-"+e.year+"-"+e.month},_onTrack:function(s){var a=s.detail,r=a.state,h=s.detail.dx,o=s.detail.dy,l=Math.abs(h),u=Math.abs(o),_=this._containerWidth;"start"===r&&(this._trackStartTime=(new Date).getTime(),this._startPos=this._currentPos,this._moveQueue=[]);var d=this._startPos+h;if("track"===r){this._moveQueue.length>=4&&this._moveQueue.shift(),this._moveQueue.push(s);var c=Math.sqrt(h*h+o*o);if(!this._gesture&&c>t&&(this._gesture=l>u?"pan-x":"pan-y"),"pan-x"!==this._gesture)return;this._dragging=!0;var m=_*this._months.length;if(d>0||d<-m+_){isNaN(parseInt(this._resistStart))&&(this._resistStart=l);var g,f,v=l-this._resistStart,p=i;g=v>_?1:v/_,f=p*(1-Math.pow(1-g,n)),d=h<0?-this._scrollWidth+_-f:f}else this._resistStart=null;this._translateX(d)}if("end"===r){this._resistStart=null;var y=this._getMonthIdx(this._startPos),D=this._getMonthIdx(this._currentPos),M=this._getFastestMovement(s).v,w=D!==y||M>e;if(!this._resistStart&&"pan-x"===this._gesture&&w){if(M>e){var Y=_-l,x=Y/M;x>300&&(x=300),this._transitionDuration=x}var T=_*D*-1,b=h<0?"left":"right";this._translateX(T,"swipe",function(){this.set("_contentClass",""),this.transform("translateX("+this._startPos+"px)",this.$.months),this.fire("swiped",{direction:b})}.bind(this))}else this._translateX(this._startPos,"reset");this._gesture=null}},_getMonthIdx:function(t){var e=this._containerWidth,i=Math.floor((-t+e/2)/e);return i<0?0:i},_translateX:function(t,e,i){if(isNaN(parseInt(t)))throw new Error("Not a number: "+t);this._currentPos=t,e&&(this._transitionDuration&&(this.$.months.style.transitionDuration=this._transitionDuration+"ms"),this._once(this._transitionEvent,function(){this.set("_contentClass",""),this.$.months.style.transitionDuration="",this._transitionDuration=null,this.$.monthNav.style.removeProperty("opacity"),i&&i()}.bind(this),this.$.months),this.set("_contentClass","animating "+e),this.$.monthNav.style.removeProperty("opacity"),this._once("touchstart",function(){})),window.requestAnimationFrame(function(){if(!e){var i=this._containerWidth/2,n=Math.abs(this._startPos-t),s=100*(1-n/i);s=(100-Math.pow(s,2))/100/100;var a=Math.abs(parseFloat(s).toFixed(2));this.$.monthNav.style.opacity=a}this.transform("translateX("+t+"px)",this.$.months)}.bind(this))},_getFastestMovement:function(t){for(var e,i,n,s,a,r=this._moveQueue.length,h=0,o=0,l=0,u=0;u<r&&(a=this._moveQueue[u]);u++)e=t.timeStamp-a.timeStamp,i=(t.detail.x-a.detail.x)/e,n=(t.detail.y-a.detail.y)/e,s=Math.sqrt(i*i+n*n),s>l&&(h=i,o=n,l=s);return{x:h,y:o,v:l}},_onSwipe:function(t){"right"===t.detail.direction?this._prevMonth():this._nextMonth()},_once:function(t,e,i){function n(){i.removeEventListener(t,n),e.apply(null,arguments)}i=i||this,i.addEventListener(t,n)},_incrMonth:function(t){var e=new Date(this.currentYear,this.currentMonth-1+t),i=e.getFullYear(),n=e.getMonth()+1;this._monthWithinValidRange(i,n)&&(this.currentYear=i,this.currentMonth=n)},_prevMonth:function(){this._incrMonth(-1)},_nextMonth:function(){this._incrMonth(1)},_dateChanged:function(t,e){this._isValidDate(t)||(console.warn("Invalid date: "+t),this.date=t=e),this._withinValidRange(t)||(console.warn("Date outside of valid range: "+t),this.date=t=e),e&&t.getTime&&e.getTime&&t.getTime()===e.getTime()||(t=new Date(t.getTime()),t.setHours(0,0,0,0),this.set("date",t),this.currentYear=t.getFullYear(),this.currentMonth=t.getMonth()+1)},_tapDay:function(t){return!!this._withinValidRange(t.model.item.date)&&void(this.date=t.model.item.date)},_isValidDate:function(t){return t&&t.getTime&&!isNaN(t.getTime())},_withinValidRange:function(t){return!!this._isValidDate(t)&&((!this.minDate||t>=this.minDate)&&(!this.maxDate||t<=this.maxDate))},_monthWithinValidRange:function(t,e){var i=new Date(t,e-1,1),n=new Date(t,e,0);return this._withinValidRange(i)||this._withinValidRange(n)},_positionSlider:function(){if(this._months&&this._containerWidth){this._scrollWidth=this.$.calendar.offsetWidth*this._months.length,this.$.months.style.minWidth=this._scrollWidth+"px";var t=12*this.currentYear+this.currentMonth-(12*this._months[0].year+this._months[0].month);this._translateX(-t*this._containerWidth)}},_resizeHandler:function(){this._containerWidth=this.$.calendar.offsetWidth,this._positionSlider(),this._updateToday()},_getDayName:function(t){return t.getFullYear()+"-"+(t.getMonth()+1)+"-"+t.getDate()},_updateToday:function(){this.today=new Date,this.today.setHours(0,0,0,0)}})}();</script>
+  <script>
+    (function() {
+
+    // Ignore movement within this distance (px)
+    var WIGGLE_THRESHOLD = 4;
+
+    // what constitues a flick (px/ms)
+    var FLICK_SPEED = 0.5;
+
+    // Factor for "springy" resistence effect when swiping too far.
+    var RESIST_LENGTH = 40;
+    var RESIST_FACTOR = 2;
+
+    // Number of months to preload on both sides of the current month
+    var PRELOAD_MONTHS = 1;
+
+    Polymer({
+      is: 'paper-calendar',
+      properties: {
+        /*
+         * The selected date
+         */
+        date: {
+          type: Date,
+          notify: true,
+          value: function() {
+            return new Date();
+          },
+          observer: '_dateChanged'
+        },
+        /**
+         * The current locale
+         */
+        locale: {
+          type: String,
+          value: 'en',
+          notify: true,
+          observer: '_localeChanged'
+        },
+        /**
+         * The minimum allowed date
+         */
+        minDate: {
+          type: Date,
+          value: null
+        },
+        /**
+         * The maximum allowed date
+         */
+        maxDate: {
+          type: Date,
+          value: null
+        },
+        /**
+         * The currently selected month (1-12) 
+         */
+        currentMonth: {
+          type: Number
+        },
+        /**
+         * The currently selected year
+         */
+        currentYear: {
+          type: Number
+        },
+        _contentClass: String,
+        _months: Array
+      },
+      behaviors: [
+        Polymer.IronResizableBehavior
+      ],
+      observers: [
+        '_populate(currentYear, currentMonth, minDate, maxDate, locale)',
+      ],
+      listeners: {
+        'iron-resize': '_resizeHandler',
+        'swiped': '_onSwipe'
+      },
+      ready: function() {
+        this._updateToday();
+        this.currentMonth = this.date.getMonth() + 1;
+        this.currentYear = this.date.getFullYear();
+        this._transitionEvent = this.style.WebkitTransition ? 'transitionEnd' : 'webkitTransitionEnd';
+      },
+      dateFormat: function(date, format, locale) {
+        if (!date) {
+          return '';
+        }
+        var value = moment(date);
+        value.locale(locale || this.locale);
+        return value.format(format);
+      },
+      _localeChanged: function(locale) {
+        // FIXME: use public API for getting locale-aware weekdays once moment/moment#2433 is fixed
+        var localeData = moment.localeData(locale);
+        var fdow = localeData._week.dow;
+        this.set('_firstDayOfWeek', fdow);
+        var weekdays = [];
+        for (var i=fdow; i<7+fdow; i++) {
+          weekdays.push(localeData._weekdaysMin[i % 7]);
+        }
+        this.set('_weekdays', weekdays);
+      },
+      _populate: function(currentYear, currentMonth, minDate, maxDate) {
+        var date, month, weeks, day, d, dayInfo, monthData, months = [];
+
+        // Make sure currentYear/currentMonth are in min/max range
+        if (minDate && new Date(currentYear, currentMonth, 0) < minDate) {
+          this.currentYear = minDate.getFullYear();
+          this.currentMonth = minDate.getMonth() + 1;
+          return;
+        } else if (maxDate && new Date(currentYear, currentMonth - 1, 1) > maxDate) {
+          this.currentYear = maxDate.getFullYear();
+          this.currentMonth = maxDate.getMonth() + 1;
+          return;
+        }
+
+        for (var i=-PRELOAD_MONTHS; i<=PRELOAD_MONTHS; i++) {
+          weeks = [[]];
+          day = 1;
+          date = new Date(currentYear, currentMonth - 1 + i, 1);
+          month = date.getMonth();
+          monthData = {
+            year: date.getFullYear(),
+            month: date.getMonth() + 1,
+            date: new Date(date)
+          };
+
+          if (!this._monthWithinValidRange(monthData.year, monthData.month)) {
+            continue;
+          }
+
+          // add "padding" days
+          var firstDay = date.getDay() - this._firstDayOfWeek;
+          if (firstDay < 0) {
+            firstDay = 7 + firstDay;
+          }
+          for (d=0; d<firstDay; d++) {
+            weeks[0].push({day: null, date: null});
+          }
+
+          // add actual days
+          while (date.getMonth() === month) {
+            if (weeks[0].length && d % 7 === 0) {
+              // start new week
+              weeks.push([]);
+            }
+            dayInfo = {
+              date: new Date(date.getFullYear(), month, day),
+              name: this.dateFormat(date,'YYYY-MM-DD'),
+              year: currentYear,
+              month: month,
+              day: day,
+            };
+            weeks[weeks.length-1].push(dayInfo);
+            date.setDate(++day);
+            d++;
+          }
+
+          // add remaining "padding" days
+          while (d < 42) {
+            if (d % 7 === 0) {
+              weeks.push([]);
+            }
+            weeks[weeks.length-1].push({day: null, date: null});
+            d += 1;
+          }
+
+          monthData.weeks = weeks;
+          months.push(monthData);
+        }
+        if (!months.length) {
+          return;
+        }
+        this.set('_months', months);
+        this._positionSlider();
+      },
+      _getDayClass: function(cssClass, date) {
+        if (!date) {
+          return cssClass;
+        }
+        if (date.getTime() === this.today.getTime()) {
+          cssClass += ' today';
+        }
+        if (this.date && this.date.getTime() === date.getTime()) {
+          cssClass += ' selected';
+        }
+        return cssClass;
+      },
+      _isDisabled: function(day, date) {
+        return !day || !this._withinValidRange(date);
+      },
+      _getMonthClass: function(name, month) {
+        return name + ' month-' + month.year + '-' + month.month;
+      },
+      _onTrack: function(event) {
+        var detail = event.detail;
+        var state = detail.state;
+        var dx = event.detail.dx;
+        var dy = event.detail.dy;
+        var adx = Math.abs(dx);
+        var ady = Math.abs(dy);
+        var width = this._containerWidth;
+
+        if (state === 'start') {
+          this._trackStartTime = (new Date()).getTime();
+          this._startPos = this._currentPos;
+          this._moveQueue = [];
+        }
+
+        var x = this._startPos + dx;
+        if (state === 'track') {
+          if (this._moveQueue.length >= 4) {
+            this._moveQueue.shift();
+          }
+          this._moveQueue.push(event);
+
+          // ignore movement within WIGGLE_THRESHOLD
+          var distance = Math.sqrt((dx * dx) + (dy * dy));
+          if (!this._gesture && distance > WIGGLE_THRESHOLD) {
+            this._gesture = adx > ady ? 'pan-x' : 'pan-y';
+          }
+
+          // only drag during pan-x gesture
+          if (this._gesture !== 'pan-x') {
+            return;
+          }
+
+          this._dragging = true;
+          var fullWidth = width * this._months.length;
+
+          // If we're dragging outside the bounds, add some resistence
+          if (x > 0 || x < (-fullWidth + width)) {
+            if (isNaN(parseInt(this._resistStart))) {
+              this._resistStart = adx;
+            }
+            var rdx = adx - this._resistStart;
+            var p, d, max = RESIST_LENGTH;
+            p = rdx > width ? 1 : rdx / width;
+            d = max * (1 - Math.pow(1 - p, RESIST_FACTOR));
+            x = (dx < 0 ? -this._scrollWidth + width - d : d);
+          } else {
+            this._resistStart = null;
+          }
+          this._translateX(x);
+        }
+        if (state === 'end') {
+          this._resistStart = null;
+          var lastIdx = this._getMonthIdx(this._startPos);
+          var idx = this._getMonthIdx(this._currentPos);
+          var speed = this._getFastestMovement(event).v;
+          var move = idx !== lastIdx || speed > FLICK_SPEED;
+          if (!this._resistStart && this._gesture === 'pan-x' && move) {
+            if (speed > FLICK_SPEED) {
+              // calculate an ideal transition duration based on current speed of swipe
+              var remainingDistance = width - adx;
+              var newDuration = remainingDistance / speed;
+              if (newDuration > 300) {
+                newDuration = 300;
+              }
+              this._transitionDuration = newDuration;
+            }
+
+            var newX = width * idx * -1;
+            var direction = (dx < 0) ? 'left' : 'right';
+
+            this._translateX(newX, 'swipe', function() {
+              this.set('_contentClass', '');
+              this.transform('translateX(' + this._startPos + 'px)', this.$.months);
+              this.fire('swiped', {direction: direction});
+            }.bind(this));
+          } else {
+            this._translateX(this._startPos, 'reset');
+          }
+          this._gesture = null;
+        }
+      },
+      _getMonthIdx: function(pos) {
+        // returns the index for the visible month according to the given position
+        var width = this._containerWidth;
+        var i = Math.floor((-pos + (width/2)) / width);
+        return i < 0 ? 0 : i;
+      },
+      _translateX: function(x, transition, cb) {
+        if (isNaN(parseInt(x))) {
+          throw new Error('Not a number: ' + x);
+        }
+        this._currentPos = x;
+        if (transition) {
+          if (this._transitionDuration) {
+            this.$.months.style.transitionDuration = this._transitionDuration + 'ms';
+          }
+          this._once(this._transitionEvent, function() {
+            this.set('_contentClass', '');
+            this.$.months.style.transitionDuration = '';
+            this._transitionDuration = null;
+            this.$.monthNav.style.removeProperty('opacity');
+            if (cb) {
+              cb();
+            }
+          }.bind(this), this.$.months);
+          this.set('_contentClass', 'animating ' + transition);
+          this.$.monthNav.style.removeProperty('opacity');
+          // Fixes odd bug in chrome where we lose touch-events after changing opacity
+          this._once('touchstart', function() {});
+        }
+        window.requestAnimationFrame(function() {
+          if (!transition) {
+            var halfWidth = this._containerWidth / 2;
+            var dx = Math.abs(this._startPos - x);
+            var p = (1 - (dx / halfWidth)) * 100;
+            p = (100 - Math.pow(p, 2)) / 100 / 100;
+            var opacity = Math.abs(parseFloat(p).toFixed(2));
+            this.$.monthNav.style.opacity = opacity;
+          }
+          this.transform('translateX(' + x + 'px)', this.$.months);
+        }.bind(this));
+      },
+      _getFastestMovement: function(event) {
+        // detect flick based on fastest segment of movement
+        var l = this._moveQueue.length;
+        var dt, tx, ty, tv, x = 0, y = 0, v = 0;
+        for (var i = 0, m; i < l && (m = this._moveQueue[i]); i++) {
+          dt = event.timeStamp - m.timeStamp;
+          tx = (event.detail.x - m.detail.x) / dt;
+          ty = (event.detail.y - m.detail.y) / dt;
+          tv = Math.sqrt(tx * tx + ty * ty);
+          if (tv > v) {
+            x = tx;
+            y = ty;
+            v = tv;
+          }
+        }
+        return {x: x, y: y, v: v};
+      },
+      _onSwipe: function(event) {
+        if (event.detail.direction === 'right') {
+          this._prevMonth();
+        } else {
+          this._nextMonth();
+        }
+      },
+      _once: function(eventName, callback, node) {
+        node = node || this;
+        function onceCallback() {
+          node.removeEventListener(eventName, onceCallback);
+          callback.apply(null, arguments);
+        }
+        node.addEventListener(eventName, onceCallback);
+      },
+      _incrMonth: function(i) {
+        var date = new Date(this.currentYear, this.currentMonth - 1 + i);
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        if (this._monthWithinValidRange(year, month)) {
+          this.currentYear = year;
+          this.currentMonth = month;
+        }
+      },
+      _prevMonth: function() {
+        this._incrMonth(-1);
+      },
+      _nextMonth: function() {
+        this._incrMonth(1);
+      },
+      _dateChanged: function(date, oldValue) {
+        if (!this._isValidDate(date)) {
+          console.warn('Invalid date: ' + date);
+          this.date = date = oldValue;
+        }
+        if (!this._withinValidRange(date)) {
+          console.warn('Date outside of valid range: ' + date);
+          this.date = date = oldValue;
+        }
+        if (oldValue && date.getTime && oldValue.getTime && date.getTime() === oldValue.getTime()) {
+          return;
+        }
+        // clone the date object so as not to have unintended effects on bindings
+        date = new Date(date.getTime());
+        date.setHours(0, 0, 0, 0);
+        this.set('date', date);
+        this.currentYear = date.getFullYear();
+        this.currentMonth = date.getMonth() + 1;
+      },
+      _tapDay: function(event) {
+        if (!this._withinValidRange(event.model.item.date)) {
+          return false;
+        }
+        this.date = event.model.item.date;
+      },
+      _isValidDate: function(date) {
+        return date && date.getTime && !isNaN(date.getTime());
+      },
+      _withinValidRange: function(date) {
+        if (this._isValidDate(date)) {
+          return (!this.minDate || date >= this.minDate) && (!this.maxDate || date <= this.maxDate);
+        }
+        return false;
+      },
+      _monthWithinValidRange: function(year, month) {
+        var monthStart = new Date(year, month-1, 1);
+        var monthEnd = new Date(year, month, 0);
+        return this._withinValidRange(monthStart) || this._withinValidRange(monthEnd);
+      },
+      _positionSlider: function() {
+        if (!this._months || !this._containerWidth) {
+          return;
+        }
+        this._scrollWidth = (this.$.calendar.offsetWidth * this._months.length);
+        this.$.months.style.minWidth = this._scrollWidth + 'px';
+        var i = ((this.currentYear * 12) + this.currentMonth) - 
+                 ((this._months[0].year * 12) + this._months[0].month);
+        this._translateX(-i * this._containerWidth);
+      },
+      _resizeHandler: function() {
+        this._containerWidth = this.$.calendar.offsetWidth;
+        this._positionSlider();
+        this._updateToday();
+      },
+      _getDayName: function(date) {
+        return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+      },
+      _updateToday: function() {
+        this.today = new Date();
+        this.today.setHours(0, 0, 0, 0);
+      },
+    });
+   })();
+  </script>
 </dom-module>
-</body></html>

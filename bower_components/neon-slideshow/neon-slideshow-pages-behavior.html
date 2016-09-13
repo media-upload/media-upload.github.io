@@ -1,4 +1,4 @@
-<html><head><link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
+<link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../iron-selector/iron-selectable.html">
 <link rel="import" href="../neon-animation/neon-animation-runner-behavior.html">
 <link rel="import" href="../neon-animation/animations/opaque-animation.html">
@@ -8,5 +8,162 @@
 <link rel="import" href="../neon-animation/animations/slide-left-animation.html">
 <link rel="import" href="../polymer/polymer.html">
 
-<script>window.Zecat=window.Zecat||{},Zecat.NeonSlideshowPagesBehaviorImpl={properties:{activateEvent:{type:String,value:""},animateInitialSelection:{type:Boolean,value:!1},startAt:{type:Number,value:0}},observers:["_selectedChanged(selected)"],listeners:{"neon-animation-finish":"_onNeonAnimationFinish"},ready:function(){this.selected=this.startAt},setAnimationDirection:function(e){switch(e){case"left":this.entryAnimation="slide-from-left-animation",this.exitAnimation="slide-right-animation";break;case"right":this.entryAnimation="slide-from-right-animation",this.exitAnimation="slide-left-animation"}},_selectedChanged:function(e){e<this._prevSelected?this.setAnimationDirection("left"):this.setAnimationDirection("right"),this._performSlideAnimation(e)},_performSlideAnimation:function(e){var i=this.selectedItem,t=this._valueToItem(this._prevSelected)||!1;return this._prevSelected=e,t||this.animateInitialSelection?(this.animationConfig=[{name:"opaque-animation",node:i}],this.animationConfig.push({name:this.entryAnimation,node:i}),t&&(t.classList.contains("neon-animating")&&(this._squelchNextFinishEvent=!0,this.cancelAnimation(),this._completeSelectedChanged(),this._squelchNextFinishEvent=!1),this.animationConfig.push({name:this.exitAnimation,node:t}),t.classList.add("neon-animating")),i.classList.add("neon-animating"),void(this.animationConfig.length>1?this.isAttached?this.playAnimation(void 0,{fromPage:t,toPage:i}):this.async(function(){this.playAnimation(void 0,{fromPage:null,toPage:i})}):this._completeSelectedChanged(t,i))):void this._completeSelectedChanged()},_completeSelectedChanged:function(e,i){if(i&&i.classList.remove("neon-animating"),e&&e.classList.remove("neon-animating"),!i||!e)for(var t,n=this.getContentChildren(".slide"),a=0;t=n[a];a++)t.classList&&t.classList.remove("neon-animating");this.async(this._notifyPageResize)},_onNeonAnimationFinish:function(e){return this._squelchNextFinishEvent?void(this._squelchNextFinishEvent=!1):void this._completeSelectedChanged(e.detail.fromPage,e.detail.toPage)},_notifyPageResize:function(){var e=this.selectedItem;this.resizerShouldNotify=function(i){return i==e},this.notifyResize()}},Zecat.NeonSlideshowPagesBehavior=[Polymer.IronResizableBehavior,Polymer.IronSelectableBehavior,Polymer.NeonAnimationRunnerBehavior,Zecat.NeonSlideshowPagesBehaviorImpl];</script>
-</head><body></body></html>
+<script>
+
+  window.Zecat = window.Zecat || {};
+
+  /**
+   * @polymerBehavior Zecat.NeonSlideshowPagesBehavior
+   */
+  
+  Zecat.NeonSlideshowPagesBehaviorImpl = {
+    properties: {
+      activateEvent: {
+        type: String,
+        value: ''
+      },
+      // if true, the initial page selection will also be animated according to its animation config.
+      animateInitialSelection: {
+        type: Boolean,
+        value: false
+      },
+      /**
+       * The carousel's initial item's index.
+       */
+      startAt: {
+        type: Number,
+        value: 0
+      }
+    },
+    observers: [
+      '_selectedChanged(selected)'
+    ],
+    listeners: {
+      'neon-animation-finish': '_onNeonAnimationFinish'
+    },
+    ready: function() {
+      this.selected = this.startAt;
+    },
+    setAnimationDirection: function(choosedDirection) {
+      switch (choosedDirection) {
+        case 'left':
+          this.entryAnimation = "slide-from-left-animation";
+          this.exitAnimation = "slide-right-animation";
+          break;
+        case 'right':
+          this.entryAnimation = "slide-from-right-animation";
+          this.exitAnimation = "slide-left-animation";
+          break;
+      }
+    },
+    _selectedChanged: function(selected) {
+      if(selected < this._prevSelected) {
+        this.setAnimationDirection("left");
+      } else {
+        this.setAnimationDirection("right");
+      }
+      this._performSlideAnimation(selected);
+    },
+
+    _performSlideAnimation: function(selected) {
+      var selectedPage = this.selectedItem;
+      var oldPage = this._valueToItem(this._prevSelected) || false;
+      this._prevSelected = selected;
+
+      // on initial load and if animateInitialSelection is negated, simply display selectedPage.
+      if (!oldPage && !this.animateInitialSelection) {
+        this._completeSelectedChanged();
+        return;
+      }
+      // insert safari fix.
+      this.animationConfig = [{
+        name: 'opaque-animation',
+        node: selectedPage
+      }];
+      // configure selectedPage animations.
+      this.animationConfig.push({
+        name: this.entryAnimation,
+        node: selectedPage
+      });
+      // configure oldPage animations iff exists.
+      if (oldPage) {
+        // cancel the currently running animation if one is ongoing.
+        if (oldPage.classList.contains('neon-animating')) {
+          this._squelchNextFinishEvent = true;
+          this.cancelAnimation();
+          this._completeSelectedChanged();
+          this._squelchNextFinishEvent = false;
+        }
+        // configure the animation.
+        this.animationConfig.push({
+          name: this.exitAnimation,
+          node: oldPage
+        });
+        // display the oldPage during the transition.
+        oldPage.classList.add('neon-animating');
+      }
+      // display the selectedPage during the transition.
+      selectedPage.classList.add('neon-animating');
+      // actually run the animations.
+      if (this.animationConfig.length > 1) {
+        // on first load, ensure we run animations only after element is attached.
+        if (!this.isAttached) {
+          this.async(function () {
+            this.playAnimation(undefined, {
+              fromPage: null,
+              toPage: selectedPage
+            });
+          });
+        } else {
+          this.playAnimation(undefined, {
+            fromPage: oldPage,
+            toPage: selectedPage
+          });
+        }
+      } else {
+        this._completeSelectedChanged(oldPage, selectedPage);
+      }
+    },
+    /**
+     * @param {Object=} oldPage
+     * @param {Object=} selectedPage
+     */
+    _completeSelectedChanged: function(oldPage, selectedPage) {
+      if (selectedPage) {
+        selectedPage.classList.remove('neon-animating');
+      }
+      if (oldPage) {
+        oldPage.classList.remove('neon-animating');
+      }
+      if (!selectedPage || !oldPage) {
+        var nodes = this.getContentChildren('.slide');
+        for (var node, index = 0; node = nodes[index]; index++) {
+          node.classList && node.classList.remove('neon-animating');
+        }
+      }
+      this.async(this._notifyPageResize);
+    },
+    _onNeonAnimationFinish: function(event) {
+      if (this._squelchNextFinishEvent) {
+        this._squelchNextFinishEvent = false;
+        return;
+      }
+      this._completeSelectedChanged(event.detail.fromPage, event.detail.toPage);
+    },
+    _notifyPageResize: function() {
+      var selectedPage = this.selectedItem;
+      this.resizerShouldNotify = function(element) {
+        return element == selectedPage;
+      }
+      this.notifyResize();
+    }
+  };
+
+  Zecat.NeonSlideshowPagesBehavior = [
+    Polymer.IronResizableBehavior,
+    Polymer.IronSelectableBehavior,
+    Polymer.NeonAnimationRunnerBehavior,
+    Zecat.NeonSlideshowPagesBehaviorImpl
+  ];
+
+</script>

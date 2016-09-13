@@ -1,4 +1,4 @@
-<html><head><link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-media-query/iron-media-query.html">
 <link rel="import" href="../neon-animation/neon-animated-pages.html">
 <link rel="import" href="../neon-animation/neon-animatable.html">
@@ -12,12 +12,49 @@
 <link rel="import" href="paper-calendar.html">
 <link rel="import" href="paper-date-picker-dialog-style.html">
 
+<!--
+Material Design [Pickers](http://www.google.com/design/spec/components/pickers.html)
 
+Provides a responsive date picker based on the material design spec.
 
+## Examples:
 
+Default picker:
+
+    <paper-date-picker></paper-date-picker>
+
+Setting the initial date to April 20, 2015:
+
+    <paper-date-picker date="April 20, 2015"></paper-date-picker>
+
+You may also specify a minimum and/or maximum date allowed in this picker using
+the same date notation:
+
+    <paper-date-picker min-date="April 1, 2015" max-date="June 30, 2015"></paper-date-picker>
+
+If you include this element as part of `paper-dialog`, use the class
+`"paper-date-picker-dialog"` on the dialog element in order to give it proper
+styling:
+
+    <paper-dialog id="dialog" class="paper-date-picker-dialog" modal 
+      on-iron-overlay-closed="dismissDialog">
+      <paper-date-picker id="picker" date="[[date]]"></paper-date-picker>
+      <div class="buttons">
+        <paper-button dialog-dismiss>Cancel</paper-button>
+        <paper-button dialog-confirm>OK</paper-button>
+      </div>
+    </paper-dialog>
+
+@element paper-date-picker
+@blurb Provides a responsive date picker based on the material design spec.
+@homepage http://bendavis78.github.io/paper-date-picker/
+@demo demo/index.html
+-->
+
+<!-- include dialog style at document-level for backward compatibility -->
 <style is="custom-style" include="paper-date-picker-dialog-style"></style>
 
-</head><body><dom-module id="paper-date-picker">
+<dom-module id="paper-date-picker">
   <template>
     <style>
       :host {
@@ -143,14 +180,17 @@
           </template>
         </div>
       </div>
-      <neon-animated-pages id="pages" selected="{{_selectedPage}}" attr-for-selected="id" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
+      <neon-animated-pages id="pages" selected="{{_selectedPage}}" attr-for-selected="id" 
+        entry-animation="fade-in-animation" exit-animation="fade-out-animation">
         <neon-animatable id="chooseDate">
-          <paper-calendar id="calendar" locale="{{locale}}" date="{{date}}" min-date="{{minDate}}" max-date="{{maxDate}}">
+          <paper-calendar id="calendar" locale="{{locale}}" date="{{date}}"
+            min-date="{{minDate}}" max-date="{{maxDate}}">
           </paper-calendar>
         </neon-animatable>
         <neon-animatable id="chooseYear">
-          <div id="yearList" cross-fade="">
-            <iron-selector id="yearSelector" attr-for-selected="label" on-iron-select="_yearSelected">
+          <div id="yearList" cross-fade>
+            <iron-selector id="yearSelector" attr-for-selected="label" 
+              on-iron-select="_yearSelected">
               <template is="dom-repeat" items="{{years}}" as="year">
                 <div class="year" label$="{{year}}" on-tap="_tapYear">{{year}}</div>
               </template>
@@ -160,6 +200,177 @@
       </neon-animated-pages>
     </div>
   </template>
-  <script>Polymer({is:"paper-date-picker",properties:{date:{type:Date,notify:!0},responsiveWidth:{type:String,value:"560px"},locale:{type:String,value:"en"},headingFormat:{type:String,value:"ddd, MMM D"},minDate:{type:Date,value:null},maxDate:{type:Date,value:null},forceNarrow:{type:Boolean,value:!1},narrow:{type:Boolean,reflectToAttribute:!0,notify:!0,computed:"_computeNarrow(forceNarrow, _queryMatches)"},isTouch:{type:Boolean,value:!1,readOnly:!0,reflectToAttribute:!0},years:{type:Array,computed:"_computeYears(minDate, maxDate)"},_queryMatches:{type:Boolean,value:!1},headingBreak:{type:String,value:"[,]"},_selectedPage:String},behaviors:[Polymer.IronResizableBehavior],listeners:{"iron-resize":"_resizeHandler"},ready:function(){this.today=this.$.calendar.today,this.isTouch="ontouchstart"in window,this._selectPage("chooseDate")},dateFormat:function(){return this.$.calendar.dateFormat.apply(this.$.calendar,arguments)},_tapYear:function(){this._selectPage("chooseDate")},_yearSelected:function(e,t){var a=parseInt(t.item.getAttribute("label")),r=new Date(this.date);a!==r.getFullYear()&&(r.setFullYear(a),this.date=r)},_tapHeadingDate:function(){"chooseDate"!==this.$.pages.selected&&this._selectPage("chooseDate")},_tapHeadingYear:function(){var e=this.date.getFullYear();this.async(function(){this._scrollToYear(e)}.bind(this)),"chooseYear"!==this.$.pages.selected&&(this.$.yearSelector.select(e.toString()),this._selectPage("chooseYear"))},_selectPage:function(e){this.$.pages.selected=e},_scrollToYear:function(e){var t=this.$.yearSelector.querySelector('.year[label="'+e+'"]'),a=this.$.chooseYear.offsetHeight/2;this.$.yearList.scrollTop=t.offsetTop-a+t.offsetHeight/2},_computeYears:function(e,t){for(var a=e?e.getFullYear():1900,r=t?t.getFullYear():2100,i=[],o=a;o<=r;o++)i.push(o);return i},_getMediaQuery:function(e,t){return"(max-width: "+(e?"":t)+")"},_getHeadingClass:function(e,t){return e+" pg-"+t},_splitHeadingDate:function(e,t,a){var r,i=new RegExp(this.headingBreak,"g"),o=this.dateFormat(e,t,a),s=o.match(i);return r=s?o.split(i).map(function(e,t){return e+(s[t]||"")}):[o]},_computeNarrow:function(e,t){return e||t},_resizeHandler:function(){this._resizing||(this._resizing=!0,this.$.calendar.notifyResize(),this._resizing=!1,this.updateStyles())}});</script>
+  <script>
+
+    Polymer({
+      is: 'paper-date-picker',
+      properties: {
+        /**
+         * The selected date (YYYY-MM-DD)
+         */
+        date: {
+          type: Date,
+          notify: true
+        },
+        /**
+         * Maximum screen width at which the picker uses a vertical layout
+         */
+        responsiveWidth: {
+          type: String,
+          value: '560px'
+        },
+        /**
+         * The current locale
+         */
+        locale: {
+          type: String,
+          value: 'en'
+        },
+        /**
+         * The format of the date displayed in the heading.
+         * See docuemntation for Moment.js for more info.
+         */
+        headingFormat: {
+          type: String,
+          value: 'ddd, MMM D'
+        },
+        /**
+         * The minimum allowed date
+         */
+        minDate: {
+          type: Date,
+          value: null
+        },
+        /**
+         * The maximum allowed date
+         */
+        maxDate: {
+          type: Date,
+          value: null
+        },
+        /**
+         * Force narrow layout
+         */
+        forceNarrow: {
+          type: Boolean,
+          value: false
+        },
+        narrow: {
+          type: Boolean,
+          reflectToAttribute: true,
+          notify: true,
+          computed: '_computeNarrow(forceNarrow, _queryMatches)'
+        },
+        isTouch: {
+          type: Boolean,
+          value: false,
+          readOnly: true,
+          reflectToAttribute: true
+        },
+        years: {
+          type: Array,
+          computed: '_computeYears(minDate, maxDate)'
+        },
+        _queryMatches: {
+          type: Boolean,
+          value: false
+        },
+        headingBreak: {
+          type: String,
+          value: '[,]'
+        },
+        _selectedPage: String
+      },
+      behaviors: [
+        Polymer.IronResizableBehavior
+      ],
+      listeners: {
+        'iron-resize': '_resizeHandler'
+      },
+      ready: function() {
+        this.today = this.$.calendar.today;
+        this.isTouch = 'ontouchstart' in window;
+        this._selectPage('chooseDate');
+      },
+      dateFormat: function() {
+        return this.$.calendar.dateFormat.apply(this.$.calendar, arguments);
+      },
+      _tapYear: function() {
+        this._selectPage('chooseDate');
+      },
+      _yearSelected: function(e, detail) {
+        var year = parseInt(detail.item.getAttribute('label'));
+        var date = new Date(this.date);
+        if (year !== date.getFullYear()) {
+          date.setFullYear(year);
+          this.date = date;
+        }
+      },
+      _tapHeadingDate: function() {
+        if (this.$.pages.selected !== 'chooseDate') {
+          this._selectPage('chooseDate');
+        }
+      },
+      _tapHeadingYear: function() {
+        var year = this.date.getFullYear();
+        this.async(function() {
+          this._scrollToYear(year);
+        }.bind(this));
+        if (this.$.pages.selected !== 'chooseYear') {
+          this.$.yearSelector.select(year.toString());
+          this._selectPage('chooseYear');
+        }
+      },
+      _selectPage: function(page) {
+        this.$.pages.selected = page;
+      },
+      _scrollToYear: function(year) {
+        var el = this.$.yearSelector.querySelector('.year[label="' + year + '"]');
+        var middle = this.$.chooseYear.offsetHeight / 2;
+        this.$.yearList.scrollTop = el.offsetTop - middle + (el.offsetHeight / 2);
+      },
+      _computeYears: function(minDate, maxDate) {
+        var minYear = minDate ? minDate.getFullYear() : 1900;
+        var maxYear = maxDate ? maxDate.getFullYear() : 2100;
+        var years = [];
+        for (var y = minYear; y <= maxYear; y++) {
+          years.push(y);
+        }
+        return years;
+      },
+      _getMediaQuery: function(forceNarrow, responsiveWidth) {
+        return '(max-width: ' + (forceNarrow ? '' : responsiveWidth) + ')';
+      },
+      _getHeadingClass: function(pfx, selectedPage) {
+        return pfx + ' pg-' + selectedPage;
+      },
+      _splitHeadingDate: function(date, format, locale) {
+        var re = new RegExp(this.headingBreak, 'g');
+        var text = this.dateFormat(date, format, locale);
+        var seps = text.match(re);
+        var value;
+        if (!seps) {
+          value = [text];
+        } else {
+          value = text.split(re).map(function(s, i) {
+            return s + (seps[i] || '');
+          });
+        }
+        return value;
+      },
+      _computeNarrow: function(queryMatches, forceNarrow) {
+        return queryMatches || forceNarrow;
+      },
+      _resizeHandler: function() {
+        if (this._resizing) {
+          return;
+        }
+        this._resizing = true;
+        this.$.calendar.notifyResize();
+        this._resizing = false;
+
+        this.updateStyles();
+      }
+    });
+  </script>
 </dom-module>
-</body></html>

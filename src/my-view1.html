@@ -1,4 +1,17 @@
-<html><head><meta charset="UTF-8"><link rel="import" href="my-app.html"></head><body><dom-module id="my-view1">
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-view1">
   <template>
     <style include="shared-styles">
       :host {
@@ -77,24 +90,61 @@
         <file-upload droppable="true" raised="true" multi="true" accept="image/*">Choose Image</file-upload>
       </p>
       <p>
-      <paper-button raised="" on-tap="openStartDate">Choose Start Date</paper-button>
-      <paper-button disabled="">[[planDate.startDate]]</paper-button>
-      <app-datepicker-dialog id="startDatePicker" date="{{planDate.startDate}}" with-backdrop="" disabledays="" input-date="[[planDate.startDate]]"></app-datepicker-dialog>
+      <paper-button raised on-tap="openStartDate">Choose Start Date</paper-button>
+      <paper-button disabled>[[planDate.startDate]]</paper-button>
+      <app-datepicker-dialog id="startDatePicker"
+                             date="{{planDate.startDate}}"
+                             with-backdrop
+                             disableDays=""
+                             input-date="[[planDate.startDate]]"></app-datepicker-dialog>
       </p>
       <p>
-      <paper-button raised="" on-tap="openStartTime" name="timePicker">Choose Start Time</paper-button>
-      <paper-button disabled="">[[time]]</paper-button>
-      <compound-timepicker-dialog id="startTimePicker" time="{{time}}" with-backdrop=""></compound-timepicker-dialog>
+      <paper-button raised on-tap="openStartTime" name="timePicker">Choose Start Time</paper-button>
+      <paper-button disabled>[[time]]</paper-button>
+      <compound-timepicker-dialog id="startTimePicker" time="{{time}}" with-backdrop></compound-timepicker-dialog>
       </p>
 
       <paper-input label="Alt text"></paper-input>
       <p>
-        <paper-button raised="" on-tap="submit" name="submit" id="submit">Submit</paper-button>
+        <paper-button raised on-tap="submit" name="submit" id="submit">Submit</paper-button>
       </p>
     </div>
 
   </template>
 
-  <script>Polymer({is:"my-view1",properties:{planDate:{type:Object,value:function(){return{startDate:"2016/12/01",endDate:"2016/12/31"}},observer:"_planDateChanged"}},openStartDate:function(){this.$.startDatePicker.open()},openStartTime:function(){this.$.startTimePicker.open()},submit:function(){console.log("submit!")},_planDateChanged:function(e,t){console.log("plan-date-changed:",e,t)}});</script>
+  <script>
+    Polymer({
+      is: 'my-view1',
+
+      properties: {
+        planDate: {
+          type: Object,
+          value: function () {
+            return {
+              startDate: '2016/12/01',
+              endDate: '2016/12/31'
+            };
+          },
+          observer: '_planDateChanged'
+        },
+      },
+
+      openStartDate: function () {
+        this.$.startDatePicker.open();
+      },
+
+      openStartTime: function () {
+        this.$.startTimePicker.open();
+      },
+
+      submit: function () {
+        console.log('submit!');
+      },
+
+      _planDateChanged: function (_newv, _oldv) {
+        console.log('plan-date-changed:', _newv, _oldv);
+      }
+
+    });
+  </script>
 </dom-module>
-</body></html>

@@ -1,4 +1,5 @@
-<!DOCTYPE html><html><head><link rel="import" href="../polymer/polymer.html">
+<!doctype html>
+<link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
@@ -7,8 +8,21 @@
 <link rel="import" href="../paper-ripple/paper-ripple.html">
 <link rel="import" href="../paper-styles/paper-styles.html">
 
+<!--
+An item in a material design modal [bottom sheet](https://www.google.com/design/spec/components/bottom-sheets.html)
 
-</head><body><dom-module id="paper-bottom-sheet-item">
+### Example
+
+```html
+<paper-bottom-sheet-item text="Star" icon="icons:star-border" on-tap="star"></paper-bottom-sheet-item>
+<paper-bottom-sheet-item text="Delete" icon="icons:delete" warning on-tap="delete"></paper-bottom-sheet-item>
+<paper-bottom-sheet-item text="Fullscreen" icon="icons:fullscreen" disabled"></paper-bottom-sheet-item>
+```
+
+
+@demo demo/index.html
+-->
+<dom-module id="paper-bottom-sheet-item">
 
 	<template>
 		<style>
@@ -30,13 +44,54 @@
 		</style>
 
 		<paper-icon-item class="item" disabled$="[[disabled]]">
-			<paper-ripple fit=""></paper-ripple>
-			<iron-icon icon="[[icon]]" item-icon=""></iron-icon>
+			<paper-ripple fit></paper-ripple>
+			<iron-icon icon="[[icon]]" item-icon></iron-icon>
 			<span>[[text]]</span>
 		</paper-icon-item>
 	</template>
 
 </dom-module>
 
-<script>!function(){Polymer({is:"paper-bottom-sheet-item",properties:{text:String,icon:{type:String,value:"icons:check"},warning:{type:Boolean,value:!1,reflectToAttribute:!0},disabled:{type:Boolean,value:!1,reflectToAttribute:!0}}})}();</script>
-</body></html>
+<script>
+
+(function() {
+
+	Polymer({
+		is: 'paper-bottom-sheet-item',
+		properties: {
+			/**
+			 * Text for the item
+			 */
+			text: String,
+
+			/**
+			 * Icon ID for the item. The icon will be passed to [`iron-icon`](https://elements.polymer-project.org/elements/iron-icon). See for [options](https://elements.polymer-project.org/elements/iron-icons?view=demo:demo/index.html&active=iron-icons).
+			 */
+			icon: {
+				type: String,
+				value: 'icons:check'
+			},
+
+			/**
+			 * True if the item is a warning
+			 */
+			warning: {
+				type: Boolean,
+				value: false,
+				reflectToAttribute: true
+			},
+
+			/**
+			 * True if the item is disabled
+			 */
+			disabled: {
+				type: Boolean,
+				value: false,
+				reflectToAttribute: true
+			}
+		}
+	});
+
+})();
+
+</script>

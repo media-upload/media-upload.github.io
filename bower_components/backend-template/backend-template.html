@@ -1,4 +1,4 @@
-<html><head><link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
 <link rel="import" href="../iron-flex-layout/classes/iron-flex-layout.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
@@ -24,8 +24,24 @@
 <link rel="import" href="../paper-toolbar/paper-toolbar.html">
 <link rel="import" href="../polymer/polymer.html">
 
+<!--
 
-</head><body><dom-module id="backend-template">
+Example:
+
+    <backend-template name="Backend title">
+      <backend-category icon="icons:home" name="Category 1" route="category-1">
+        <backend-page name="PAGE A" route="page-a">
+          <h1>Content page A</h1>
+        </backend-page>
+      <backend-category>
+    </backend-template>
+
+@group Seed Elements
+@element backend-template
+@demo demo/index.html
+@hero hero.svg
+-->
+<dom-module id="backend-template">
 
   <template>
     <style>
@@ -78,26 +94,34 @@
       }
     </style>
 
-    <paper-drawer-panel drawer-width="[[drawerWidth]]" force-narrow="">
-      <paper-header-panel drawer="" mode="waterfall" class="shadow-elevation-16dp">
+    <paper-drawer-panel drawer-width="[[drawerWidth]]" force-narrow>
+      <paper-header-panel drawer mode="waterfall" class="shadow-elevation-16dp">
         <paper-toolbar>
           <span id="name">[[name]]</span>
         </paper-toolbar>
         <paper-menu attr-for-selected="route" selected="{{selected}}">
           <template is="dom-repeat" items="[[items]]">
             <paper-icon-item route="[[item.route]]">
-              <iron-icon icon="[[item.icon]]" item-icon=""></iron-icon>
+              <iron-icon icon="[[item.icon]]" item-icon></iron-icon>
               [[item.name]]
               <paper-ripple></paper-ripple>
             </paper-icon-item>
           </template>
         </paper-menu>
       </paper-header-panel>
-      <paper-scroll-header-panel main="" keep-condensed-header="" scroll-away-topbar="" no-reveal="" header-state="{{headerState}}">
+      <paper-scroll-header-panel
+        main
+        keep-condensed-header
+        scroll-away-topbar
+        no-reveal
+        header-state="{{headerState}}">
         <paper-toolbar id="mainToolbar" class="tall shadow-transition">
           <div class="center horizontal layout fit">
-            <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle=""></paper-icon-button>
-            <iron-pages attr-for-selected="route" selected="[[selected]]" class="flex">
+            <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
+            <iron-pages
+              attr-for-selected="route"
+              selected="[[selected]]"
+              class="flex">
               <template is="dom-repeat" items="[[items]]">
                 <span route="[[item.route]]" id="categoryName">[[item.name]]</span>
               </template>
@@ -105,7 +129,7 @@
           </div>
           <iron-pages id="slideTop" attr-for-selected="route" selected="{{selected}}" class="middle center horizontal layout fit">
             <template is="dom-repeat" items="[[items]]" as="category">
-              <paper-tabs attr-for-selected="page" route="[[category.route]]" selected="{{category.selected}}" noink="">
+              <paper-tabs attr-for-selected="page" route="[[category.route]]" selected="{{category.selected}}" noink>
                 <template is="dom-repeat" items="[[category.items]]" as="page">
                   <paper-tab page="[[page.route]]">[[page.name]]</paper-tab>
                 </template>
@@ -113,7 +137,11 @@
             </template>
           </iron-pages>
         </paper-toolbar>
-        <neon-animated-pages selected="{{selected}}" attr-for-selected="route" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
+        <neon-animated-pages
+          selected="{{selected}}"
+          attr-for-selected="route"
+          entry-animation="fade-in-animation"
+          exit-animation="fade-out-animation">
           <content></content>
         </neon-animated-pages>
       </paper-scroll-header-panel>
@@ -121,5 +149,54 @@
   </template>
 </dom-module>
 
-<script>Polymer({is:"backend-template",properties:{drawerWidth:{type:String,value:"220px"},headerState:{type:Number,observer:"headerStateChange"},name:{type:String,value:"Backend"},selected:String,attrForSelected:{type:String,value:"route"}},behaviors:[Polymer.IronSelectableBehavior],listeners:{"paper-header-transform":"transformToolbar"},attached:function(){this.selected=this.items[0].route},transformToolbar:function(e){Polymer.Base.transform("translate3d(0,"+100*Math.min(1,e.detail.y/(e.detail.height-e.detail.condensedHeight))+"%,0)",this.$.slideTop)},headerStateChange:function(e){switch(e){case Polymer.PaperScrollHeaderPanel.HEADER_STATE_HIDDEN:this.toggleClass("shadow-elevation-4dp",!0,this.$.mainToolbar);break;case Polymer.PaperScrollHeaderPanel.HEADER_STATE_INTERPOLATED:this.toggleClass("shadow-elevation-4dp",!1,this.$.mainToolbar)}}});</script>
-</body></html>
+<script>
+
+  Polymer({
+
+    is: 'backend-template',
+
+    properties: {
+      drawerWidth: {
+        type: String,
+        value: '220px'
+      },
+      headerState: {
+        type: Number,
+        observer: 'headerStateChange'
+      },
+      name: {
+        type: String,
+        value: 'Backend'
+      },
+      selected: String,
+      attrForSelected: {
+        type: String,
+        value: 'route'
+      }
+    },
+    behaviors: [
+      Polymer.IronSelectableBehavior
+    ],
+    listeners: {
+      'paper-header-transform': 'transformToolbar'
+    },
+    attached: function() {
+      this.selected = this.items[0].route;
+    },
+    transformToolbar: function(e) {
+      Polymer.Base.transform('translate3d(0,' +  Math.min(1, e.detail.y / (e.detail.height - e.detail.condensedHeight)) * 100 + '%,0)', this.$.slideTop);
+    },
+    headerStateChange: function(headerState) {
+      switch (headerState) {
+        case Polymer.PaperScrollHeaderPanel.HEADER_STATE_HIDDEN:
+          this.toggleClass('shadow-elevation-4dp', true, this.$.mainToolbar);
+          break;
+        case Polymer.PaperScrollHeaderPanel.HEADER_STATE_INTERPOLATED:
+          this.toggleClass('shadow-elevation-4dp', false, this.$.mainToolbar);
+          break;
+      }
+    }
+
+  });
+
+</script>
